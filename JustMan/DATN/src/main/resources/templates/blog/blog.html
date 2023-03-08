@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html th:replace="~{/layout/layout :: main-fragment(
+                                                ~{:: title},
+                                                'full-header',
+                                                ~{:: #css-resources},
+                                                ~{:: #js-resources},
+                                                ~{:: #main-content}
+                                               )}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Tin tức</title>
+
+    <th:block id="css-resources">
+        <link rel="stylesheet" th:href="@{/css/index.css}" type="text/css"/>
+        <link rel="stylesheet" th:href="@{/css/components/products.css}" type="text/css"/>
+        <link rel="stylesheet" th:href="@{/css/components/lastest-news.css}" type="text/css"/>
+        <link rel="stylesheet" th:href="@{/css/components/index/index-newsletter.css}" type="text/css"/>
+        <link rel="stylesheet" th:href="@{/css/components/index/index-category.css}" type="text/css"/>
+        <link rel="stylesheet" th:href="@{/css/components/index/product-showcase.css}" type="text/css"/>
+        <!--                <link rel="stylesheet" th:href="@{/css/components/header.css}" type="text/css"/>-->
+        <!--        <link rel="stylesheet" th:href="@{/css/news.css}" type="text/css"/>-->
+        <!--        <link rel="stylesheet" th:href="@{/css/except-home-page.css}" type="text/css"/>-->
+        <link rel="stylesheet" th:href="@{/vendor/pagination/simplePagination.css}" type="text/css"/>
+    </th:block>
+</head>
+<body>
+<main id="main-content">
+    <!-- List Post -->
+    <section class="news-wrapper container">
+        <th:block th:each="post, index : ${listPost}">
+            <a class="news" th:href="@{/tin-tuc/{slug}/{id}(id=${post.id}, slug=${post.slug})}">
+                <th:block th:if="${index.even}">
+                    <div class="row">
+                        <div class="thumbnail col-lg-6 col-12">
+                            <img class="img-fluid" th:alt="${post.title}" th:src="${post.thumbnail}"/>
+                        </div>
+                        <div class="details col-5 mx-1">
+                            <div th:text="${#dates.format(post.publishedAt, 'dd/MM/yyyy')}"></div>
+                            <div class="title" th:text="${post.title}"></div>
+                            <div class="short-desc" th:text="${post.description}"></div>
+                        </div>
+                        <div class="details-small col-12">
+                            <div th:text="${#dates.format(post.publishedAt, 'dd/MM/yyyy')}"></div>
+                            <div class="title" th:text="${post.title}"></div>
+                            <div class="short-desc" th:text="${post.description}"></div>
+                        </div>
+                    </div>
+                </th:block>
+                <th:block th:if="${index.odd}">
+                    <div class="row">
+                        <div class="details col-5 offset-1">
+                            <div th:text="${#dates.format(post.publishedAt, 'dd/MM/yyyy')}"></div>
+                            <div class="title" th:text="${post.title}"></div>
+                            <div class="short-desc" th:text="${post.description}"></div>
+                        </div>
+                        <div class="thumbnail col-lg-6 col-12">
+                            <img class="img-fluid" th:alt="${post.title}" th:src="${post.thumbnail}"/>
+                        </div>
+                        <div class="details-small col-12">
+                            <div th:text="${#dates.format(post.publishedAt, 'dd/MM/yyyy')}"></div>
+                            <div class="title" th:text="${post.title}"></div>
+                            <div class="short-desc" th:text="${post.description}"></div>
+                        </div>
+                    </div>
+                </th:block>
+            </a>
+        </th:block>
+    </section>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination" id="pagination"></ul>
+    </nav>
+</main>
+
+<th:block id="js-resources">
+    <script th:src="@{/vendor/pagination/jquery.simplePagination.js}" type="text/javascript"></script>
+    <script th:src="@{/script/index.js}" type="text/javascript"></script>
+    <script th:src="@{/script/lastest-news.js}" type="text/javascript"></script>
+    <script th:inline="javascript">
+        $(window).resize(changeUi);
+
+        $(function () {
+          changeUi();
+          pagination();
+        });
+
+        function changeUi() {
+          $(".nav-link#news").addClass('active-nav');
+        }
+
+        function pagination() {
+            $('#pagination').pagination({
+                pages: [[${totalPages}]],
+                currentPage: [[${currentPage}]],
+                cssStyle: '',
+                prevText: '<span aria-hidden="true">&laquo;</span>',
+                nextText: '<span aria-hidden="true">&raquo;</span>',
+                onInit: function () {
+                    // fire first page loading
+                },
+                onPageClick: function (page, evt) {
+                    $('#pagination .active .current').addClass('page-link')
+                    $('#pagination .ellipse.clickable').addClass('page-link')
+                    $('#pagination .disabled .current.prev').addClass('page-link')
+                    $('#pagination .disabled .current.next').addClass('page-link')
+                    location.href = "/tin-tuc?page="+page
+                }
+            });
+
+            $('#pagination .active .current').addClass('page-link')
+            $('#pagination .ellipse.clickable').addClass('page-link')
+            $('#pagination .disabled .current.prev').addClass('page-link')
+            $('#pagination .disabled .current.next').addClass('page-link')
+        }
+
+
+
+
+
+
+    </script>
+</th:block>
+</body>
+</html>
+
+

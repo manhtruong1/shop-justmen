@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html th:replace="~{/layout/layout :: main-fragment(
+                                                ~{:: title},
+                                                'full-header',
+                                                ~{:: #css-resources},
+                                                ~{:: #js-resources},
+                                                ~{:: #main-content}
+                                               )}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Thông tin tài khoản</title>
+
+    <th:block id="css-resources">
+        <link rel="stylesheet" th:href="@{/css/index.css}" type="text/css"/>
+        <link rel="stylesheet" th:href="@{/css/components/header.css}" type="text/css"/>
+        <link rel="stylesheet" th:href="@{/css/except-home-page.css}" type="text/css"/>
+        <link rel="stylesheet" th:href="@{/css/account.css}" type="text/css"/>
+        <link rel="stylesheet" th:href="@{/css/account-setting.css}" type="text/css"/>
+    </th:block>
+</head>
+<body>
+<main class="container" id="main-content">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="left-sidebar">
+                <div class="header">
+                    <div class="avatar"><img alt="avatar" class="img-fluid" th:src="@{/image/post/avatar.png}"/></div>
+                    <div class="user-info">
+                        <div class="user-name" th:text="${user_fullname}"></div>
+                        <div class="edit-profile">Chỉnh sửa tài khoản</div>
+                    </div>
+                </div>
+                <div class="break-line"></div>
+                <div class="nav-sidebar">
+                    <a class="account nav-item" href="/tai-khoan">Quản lý tài khoản</a>
+                    <a class="buying-order nav-item" href="/tai-khoan/lich-su-giao-dich">Quản lý đơn hàng</a>
+                    <a class="btn btn-primary red-btn sign-out-btn" href="/api/logout">Đăng xuất</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 main-content-wrapper">
+            <div class="main-content">
+                <h2 class="account-title">Thông tin tài khoản</h2>
+                <div class="tab-content" id="pills-tabContent">
+                    <div aria-labelledby="profile-setting-tab" class="tab-pane fade show active" id="profile-setting"
+                         role="tabpanel">
+                        <form class="setting-box">
+                            <div class="full-name item-row col-md-10">
+                                <div class="text required-label">Họ tên</div>
+                                <div>
+                                    <input class="form-control" id="in-user-fullname" th:value="${user_fullname}"/>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="email item-row col-md-10">
+                                <div class="text required-label">Email</div>
+                                <input class="form-control" disabled="disabled" th:value="${user_email}"/>
+                            </div>
+                            <div class="password item-row col-md-10">
+                                <div class="text required-label">Mật khẩu</div>
+                                <div class="password-wrapper">
+                                    <input autocomplete="autocomplete" class="form-control" disabled="disabled"
+                                           type="password" value="******"/>
+                                    <a class="change-password text-btn" data-target="#changePassword" data-toggle="modal"
+                                       href="">Đổi mật khẩu</a>
+                                </div>
+                            </div>
+                            <div class="phone item-row col-md-10">
+                                <div class="text required-label">Số điện thoại</div>
+                                <div>
+                                    <input class="form-control" id="in-user-phone" th:value="${user_phone}"/>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="address item-row col-md-10">
+                                <div class="text">Địa chỉ</div>
+                                <div>
+                                    <textarea class="form-control" id="in-user-address" rows="5"
+                                              th:text="${user_address}"></textarea>
+                                </div>
+                            </div>
+                            <div class="update-btn-wrapper item-row col-md-10">
+                                <div class="btn btn-primary red-btn update-btn">Cập nhật</div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal change password -->
+    <div aria-hidden="true" aria-labelledby="changePasswordLabel" class="modal fade" id="changePassword" role="dialog"
+         tabindex="-1">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePasswordLabel">Đổi mật khẩu</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="current-password item-row">
+                        <div class="text required-label">Mật khẩu cũ</div>
+                        <div class="password-wrapper-in">
+                            <input autocomplete="autocomplete" class="form-control" id="old-password" type="password"/>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="new-password item-row">
+                        <div class="text required-label">Mật khẩu mới</div>
+                        <div class="password-wrapper-in">
+                            <input autocomplete="autocomplete" class="form-control" id="new-password" type="password"/>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="new-password-confirm item-row">
+                        <div class="text required-label">Nhập lại mật khẩu mới</div>
+                        <div class="password-wrapper-in">
+                            <input autocomplete="autocomplete" class="form-control" id="retype-password"
+                                   type="password"/>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" type="button">Huỷ bỏ</button>
+                    <button class="btn btn-primary red-btn btn-confirm-change-password" type="button">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<th:block id="js-resources">
+    <script th:src="@{/script/index.js}" type="text/javascript"></script>
+    <script th:src="@{/script/lastest-news.js}" type="text/javascript"></script>
+    <script th:src="@{/script/account.js}"></script>
+</th:block>
+</body>
+</html>
